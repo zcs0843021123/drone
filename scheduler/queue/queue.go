@@ -235,10 +235,6 @@ type worker struct {
 	channel chan *core.Stage
 }
 
-type counter struct {
-	counts map[string]int
-}
-
 func checkLabels(a, b map[string]string) bool {
 	if len(a) != len(b) {
 		return false
