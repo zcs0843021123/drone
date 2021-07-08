@@ -85,20 +85,3 @@ func skipMessageEval(str string) bool {
 		return false
 	}
 }
-
-// func skipPaths(document *config.Config, paths []string) bool {
-// 	switch {
-// 	// changed files are only returned for push and pull request
-// 	// events. If the list of changed files is empty the system will
-// 	// force-run all pipelines and pipeline steps
-// 	case len(paths) == 0:
-// 		return false
-// 	// github returns a maximum of 300 changed files from the
-// 	// api response. If there are 300+ changed files the system
-// 	// will force-run all pipelines and pipeline steps.
-// 	case len(paths) >= 300:
-// 		return false
-// 	default:
-// 		return !document.Trigger.Paths.MatchAny(paths)
-// 	}
-// }

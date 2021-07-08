@@ -152,15 +152,6 @@ func (t *triggerer) Trigger(ctx context.Context, repo *core.Repository, base *co
 	// 	base.After = tag.Sha
 	// }
 
-	// TODO: do a better job of documenting this
-	// obj := base.After
-	// if len(obj) == 0 {
-	// 	if strings.HasPrefix(base.Ref, "refs/pull/") {
-	// 		obj = base.Target
-	// 	} else {
-	// 		obj = base.Ref
-	// 	}
-	// }
 	tmpBuild := &core.Build{
 		RepoID:  repo.ID,
 		Trigger: base.Trigger,
@@ -275,13 +266,6 @@ func (t *triggerer) Trigger(ctx context.Context, repo *core.Repository, base *co
 		verified = false
 	}
 
-	// var paths []string
-	// paths, err := listChanges(t.client, repo, base)
-	// if err != nil {
-	// 	logger.Warn().Err(err).
-	// 		Msg("cannot fetch changeset")
-	// }
-
 	var matched []*yaml.Pipeline
 	var dag = dag.New()
 	for _, document := range manifest.Resources {
@@ -352,7 +336,6 @@ func (t *triggerer) Trigger(ctx context.Context, repo *core.Repository, base *co
 		Event:   base.Event,
 		Action:  base.Action,
 		Link:    base.Link,
-		// Timestamp:    base.Timestamp,
 		Title:        trunc(base.Title, 2000),
 		Message:      trunc(base.Message, 2000),
 		Before:       base.Before,
@@ -485,24 +468,6 @@ func (t *triggerer) Trigger(ctx context.Context, repo *core.Repository, base *co
 		go t.canceler.CancelPending(ctx, repo, build)
 	}
 
-	// err = t.hooks.SendEndpoint(ctx, payload, repo.Endpoints.Webhook)
-	// if err != nil {
-	// 	logger.Warn().Err(err).
-	// 		Int64("build", build.Number).
-	// 		Msg("cannot send user-defined webhook")
-	// }
-
-	// // we should only synchronize the cronjob list on push
-	// // events to the default branch.
-	// if build.Event == core.EventPush &&
-	// 	build.Target == repo.Branch {
-	// 	err = t.cron.Sync(ctx, repo, manifest)
-	// 	if err != nil {
-	// 		logger.Warn().Err(err).
-	// 			Msg("cannot sync cronjobs")
-	// 	}
-	// }
-
 	return build, nil
 }
 
@@ -529,7 +494,6 @@ func (t *triggerer) createBuildError(ctx context.Context, repo *core.Repository,
 		Event:  base.Event,
 		Action: base.Action,
 		Link:   base.Link,
-		// Timestamp:    base.Timestamp,
 		Title:        base.Title,
 		Message:      base.Message,
 		Before:       base.Before,
@@ -555,45 +519,3 @@ func (t *triggerer) createBuildError(ctx context.Context, repo *core.Repository,
 	err = t.builds.Create(ctx, build, nil)
 	return build, err
 }
-
-// func shouldBlock(repo *core.Repository, build *core.Build) bool {
-// 	switch {
-// 	case repo.Hooks.Promote == core.HookBlock && build.Event == core.EventPromote:
-// 		return true
-// 	case repo.Hooks.Rollback == core.HookBlock && build.Event == core.EventRollback:
-// 		return true
-// 	case repo.Hooks.Deploy == core.HookBlock && build.Event == core.EventRollback:
-// 		return true
-// 	case repo.Hooks.Pull == core.HookBlock && build.Event == core.EventPullRequest:
-// 		return true
-// 	case repo.Hooks.Push == core.HookBlock && build.Event == core.EventPush:
-// 		return true
-// 	case repo.Hooks.Tags == core.HookBlock && build.Event == core.EventTag:
-// 		return true
-// 	case repo.Hooks.Forks == core.HookBlock && build.Fork != repo.Slug:
-// 		return true
-// 	default:
-// 		return false
-// 	}
-// }
-
-// func skipHook(repo *core.Repository, build *core.Hook) bool {
-// 	switch {
-// 	case repo.Hooks.Promote == core.HookDisable && build.Event == core.EventPromote:
-// 		return true
-// 	case repo.Hooks.Rollback == core.HookDisable && build.Event == core.EventRollback:
-// 		return true
-// 	case repo.Hooks.Pull == core.HookDisable && build.Event == core.EventPullRequest:
-// 		return true
-// 	case repo.Hooks.Push == core.HookDisable && build.Event == core.EventPush:
-// 		return true
-// 	case repo.Hooks.Tags == core.HookDisable && build.Event == core.EventTag:
-// 		return true
-// 	default:
-// 		return false
-// 	}
-// }
-
-// func skipFork(repo *core.Repository, build *core.Hook) bool {
-// 	return repo.Hooks.Forks == core.HookDisable && build.Fork != repo.Slug
-// }

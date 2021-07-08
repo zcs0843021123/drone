@@ -188,19 +188,6 @@ func (q *queue) signal(ctx context.Context) error {
 				}
 			}
 
-			// // the queue has 60 seconds to ack the item, otherwise
-			// // it is eligible for processing by another worker.
-			// // item.Expires = time.Now().Add(time.Minute).Unix()
-			// err := q.store.Update(ctx, item)
-
-			// if err != nil {
-			// 	log.Ctx(ctx).Warn().
-			// 		Err(err).
-			// 		Int64("build_id", item.BuildID).
-			// 		Int64("stage_id", item.ID).
-			// 		Msg("cannot update queue item")
-			// 	continue
-			// }
 			select {
 			case w.channel <- item:
 				delete(q.workers, w)
