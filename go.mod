@@ -26,13 +26,11 @@ require (
 	github.com/go-chi/chi v3.3.3+incompatible
 	github.com/go-chi/cors v1.0.0
 	github.com/go-sql-driver/mysql v1.4.0
-	github.com/golang/mock v1.3.1
 	github.com/golang/protobuf v1.3.4 // indirect
-	github.com/google/go-cmp v0.4.0
 	github.com/google/go-jsonnet v0.17.0
 	github.com/google/wire v0.2.1
 	github.com/gosimple/slug v1.3.0
-	github.com/h2non/gock v1.0.15
+	github.com/h2non/gock v1.0.15 // indirect
 	github.com/hashicorp/go-cleanhttp v0.5.1 // indirect
 	github.com/hashicorp/go-multierror v1.0.0
 	github.com/hashicorp/go-retryablehttp v0.5.4
